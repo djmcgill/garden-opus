@@ -1,7 +1,7 @@
 [package]
 name = "garden-opus"
 version = "0.1.0"
-authors = ["David McGillicuddy <david.mcgillicuddy@moneyfarm.com>"]
+authors = ["David McGillicuddy <contact@djmcgill.co.uk>"]
 
 [dependencies]
 cgmath = "0.15.*"
