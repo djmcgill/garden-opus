@@ -1,19 +1,19 @@
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub enum BaseElement {
     Fire, Air, Water, Earth,
 }
 
-#[derive(PartialEq, PartialOrd, Debug)]
+#[derive(PartialEq, PartialOrd, Debug, Copy, Clone)]
 pub enum BaseMetal {
     Lead, Tin, Iron, Copper, Silver, Gold,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub enum Januae {
     Vitae, Mors,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub enum Atom {
     BaseElement(BaseElement),
     BaseMetal(BaseMetal),
@@ -37,6 +37,34 @@ impl Atom {
             _ => false,
         }
     }
+// Lead, Tin, Iron, Copper, Silver, Gold,
+    pub fn parse(c: char) -> Option<Option<Self>> {
+        use self::Atom::*;
+        use self::BaseElement::*;
+        use self::Januae::*;
+        use self::BaseMetal::*;
+        
+        match c {
+            'f' => Some(Some(BaseElement(Fire))),
+            'a' => Some(Some(BaseElement(Air))),
+            'w' => Some(Some(BaseElement(Water))),
+            'e' => Some(Some(BaseElement(Earth))),
+            's' => Some(Some(Salt)),
+            'q' => Some(Some(Quicksilver)),
+            'l' => Some(Some(BaseMetal(Lead))),
+            't' => Some(Some(BaseMetal(Tin))),
+            'i' => Some(Some(BaseMetal(Iron))),
+            'c' => Some(Some(BaseMetal(Copper))),
+            'r' => Some(Some(BaseMetal(Silver))),
+            'g' => Some(Some(BaseMetal(Gold))),
+            '^' => Some(Some(Januae(Vitae))), 
+            'v' => Some(Some(Januae(Mors))),
+            '.' => Some(None),
+            _ => None,
+        }
+
+    }
+    
 }
 
 #[cfg(test)]
