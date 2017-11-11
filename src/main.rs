@@ -4,7 +4,8 @@ extern crate graphics;
 extern crate glutin_window;
 extern crate opengl_graphics;
 
-mod model;
+pub mod my_graphics;
+pub mod model;
 
 use cgmath::*;
 use piston::window::WindowSettings;
@@ -25,17 +26,13 @@ impl App {
             const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
             const RED:   [f32; 4] = [1.0, 0.0, 0.0, 1.0];
 
-            let square = rectangle::square(0.0, 0.0, 50.0);
+            let poly = my_graphics::draw_board::unit_hex();
 
             self.gl.draw(args.viewport(), |c, gl| {
                 // Clear the screen.
                 clear(GREEN, gl);
-                let transform = c.transform.trans(0.0, 0.0)
-                                        .rot_rad(0.0)
-                                        .trans(-25.0, -25.0);
-
-                // Draw a box rotating around the middle of the screen.
-                rectangle(RED, square, transform, gl);
+                let transform = c.transform.trans(400.0, 400.0).scale(100.0, 100.0);
+                polygon(RED, poly, transform, gl);
             });
         }
 
