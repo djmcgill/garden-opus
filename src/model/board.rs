@@ -18,12 +18,6 @@ impl Debug for Board {
     }
 }
 
-impl Default for Board {
-    fn default() -> Self {
-        Board([None; 91])
-    }
-}
-
 const ROW_COUNT: usize = 11;
 const ROW_WIDTHS: [u8; ROW_COUNT] = [6, 7, 8, 9, 10, 11, 10, 9, 8, 7, 6];
 
@@ -72,7 +66,7 @@ impl Board {
         let parsed_atoms = stripped_string.map(|c| Atom::parse(c).unwrap_or_else(|| {return None;} ));
         let parsed_atoms_vec = parsed_atoms.collect::<Vec<Option<Atom>>>();
         if parsed_atoms_vec.len() != 91 { return None; }
-        let mut board = Board::default();
+        let mut board = Board::empty();
         board.0.copy_from_slice(parsed_atoms_vec.as_slice());
         Some(board)
     }
@@ -86,10 +80,14 @@ impl Board {
     pub fn is_available(&self, x: isize, y: isize) -> bool {
         let neighbour_ixs = &[(x, y-1), (x+1,y-1), (x-1,y), (x+1,y), (x,y+1),(x+1,y+1)];
         let available_neighbours = neighbour_ixs.into_iter().map(|&(n_x, n_y)| {
-            let tile = self.get(x, y);
+            let tile = self.get(n_x, n_y);
             tile.is_none() || tile.unwrap().is_none()
         }).collect::<Vec<_>>();
         has_seq_3_or_longer(&available_neighbours)
+    }
+
+    pub fn empty() -> Self {
+        Board([None; 91])
     }
 }
 

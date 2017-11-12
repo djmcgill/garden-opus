@@ -1,10 +1,5 @@
-use ::model::GameState;
 use ::model::elements::Atom;
 use graphics::*;
-
-pub fn draw_board(state: &GameState) {
-    
-}
 
 const HEX_HEIGHT: f64 = 1.0;
 const HEX_WIDTH: f64 = 0.86602540378 * HEX_HEIGHT; // sqrt(3)/2
@@ -39,12 +34,12 @@ const MORS_SYMBOL: & 'static str = "🜞";
 const QUICKSILVER_SYMBOL: & 'static str = "☿";
 const SALT_SYMBOL: & 'static str = "🜔";
 
-fn draw_atom(atom: &Atom) {
-    match *atom {
-        Atom::BaseElement(element) => {},
-        Atom::BaseMetal(metal) => {},
-        Atom::Januae(januae) => {},
-        Atom::Quicksilver => {},
-        Atom::Salt => {},
-    }
-}
+// fn draw_atom(atom: &Atom) {
+//     match *atom {
+//         Atom::BaseElement(element) => {},
+//         Atom::BaseMetal(metal) => {},
+//         Atom::Januae(januae) => {},
+//         Atom::Quicksilver => {},
+//         Atom::Salt => {},
+//     }
+// }

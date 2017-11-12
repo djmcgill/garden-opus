@@ -6,7 +6,7 @@ use self::elements::*;
 
 use cgmath::*;
 
-#[derive(PartialEq, Debug, Default)]
+#[derive(PartialEq, Debug)]
 pub struct GameState {
     board: Board,
     selected_tile: Option<Vector2<u8>>, // The hex x, y index from the top left.

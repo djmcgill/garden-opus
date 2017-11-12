@@ -4,18 +4,17 @@ extern crate graphics;
 extern crate glutin_window;
 extern crate opengl_graphics;
 
-pub mod my_graphics;
+pub mod view;
 pub mod model;
+pub mod controller;
 
 use cgmath::*;
 use piston::window::WindowSettings;
 use piston::event_loop::*;
 use piston::input::*;
 use glutin_window::GlutinWindow as Window;
-use opengl_graphics::{ GlGraphics, OpenGL, GlyphCache, Texture, TextureSettings };
+use opengl_graphics::{ GlGraphics, OpenGL, GlyphCache, TextureSettings };
 use graphics::*;
-use graphics::character::CharacterCache;
-use std::fmt::Debug;
 
 
 pub struct App {
@@ -24,18 +23,10 @@ pub struct App {
 }
 
 impl App {
-    fn render<C, E>(&mut self, args: &RenderArgs, glyphs: &mut C) 
-    where E: Debug, C: CharacterCache<Texture=Texture, Error=E> {
-        const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
-        const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
+    // fn render<C, E>(&mut self, args: &RenderArgs, glyphs: &mut C) 
+    // where E: Debug, C: CharacterCache<Texture=Texture, Error=E> {
 
-        self.gl.draw(args.viewport(), |c, gl| {
-            clear(GREEN, gl);
-            my_graphics::draw_board::draw_hex(c.reset(), gl);
-            let transform = c.transform.trans(400.0, 400.0);
-            text(BLACK, 50, "a", glyphs, transform, gl).unwrap();
-        });
-    }
+    // }
 }
 
 fn main() {
@@ -63,16 +54,26 @@ fn main() {
 
     let center = Vector2::new(width as f64/2.0, height as f64/2.0);
 
+    let board = model::board::Board::empty();
+    let board_controller = controller::BoardController::new(board);
+    let board_view = view::BoardView::new();
+
     // Create a new game and run it.
     let mut app = App {
         gl: GlGraphics::new(opengl_version),
         current_mouse_pos: center,
     };
 
+
     let mut events = Events::new(EventSettings::new().lazy(true));
     while let Some(e) = events.next(&mut window) {
         if let Some(r) = e.render_args() {
-            app.render(&r, glyphs);
+            const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+
+            app.gl.draw(r.viewport(), |c, gl| {
+                clear(GREEN, gl);
+                board_view.draw(&board_controller, &c, gl, glyphs);
+            });
         }
 
         if let Some(xy) = e.mouse_cursor_args() {
