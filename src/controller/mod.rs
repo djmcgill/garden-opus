@@ -1,13 +1,13 @@
 use piston::input::GenericEvent;
-use ::model::board::Board;
+use ::model::GameState;
 
 pub struct BoardController {
-    pub board: Board,
+    pub board: GameState,
 }
 
 impl BoardController {
     /// Creates a new board controller.
-    pub fn new(board: Board) -> Self {
+    pub fn new(board: GameState) -> Self {
         BoardController {board}
     }
 

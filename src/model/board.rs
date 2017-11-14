@@ -3,8 +3,40 @@ use std::result::Result;
 
 use super::Atom;
 
+pub const ROW_COUNT: usize = 11;
+pub const ROW_WIDTHS: [u8; ROW_COUNT] = [6, 7, 8, 9, 10, 11, 10, 9, 8, 7, 6];
+
+pub const IX_TO_COORDS: &'static[(usize, usize)] = &[
+                    ( 0, 0), ( 0, 1), ( 0, 2), ( 0, 3), ( 0, 4), ( 0, 5),
+                ( 1, 0), ( 1, 1), ( 1, 2), ( 1, 3), ( 1, 4), ( 1, 5), ( 1, 6), 
+            ( 2, 0), ( 2, 1), ( 2, 2), ( 2, 3), ( 2, 4), ( 2, 5), ( 2, 6), ( 2, 7),
+        ( 3, 0), ( 3, 1), ( 3, 2), ( 3, 3), ( 3, 4), ( 3, 5), ( 3, 6), ( 3, 7), ( 3, 8),
+    ( 4, 0), ( 4, 1), ( 4, 2), ( 4, 3), ( 4, 4), ( 4, 5), ( 4, 6), ( 4, 7), ( 4, 8), ( 4, 9),
+( 5, 0), ( 5, 1), ( 5, 2), ( 5, 3), ( 5, 4), ( 5, 5), ( 5, 6), ( 5, 7), ( 5, 8), ( 5, 9), ( 5,10),
+    ( 6, 1), ( 6, 2), ( 6, 3), ( 6, 4), ( 6, 5), ( 6, 6), ( 6, 7), ( 6, 8), ( 6, 9), ( 6,10),
+        ( 7, 2), ( 7, 3), ( 7, 4), ( 7, 5), ( 7, 6), ( 7, 7), ( 7, 8), ( 7, 9), ( 7,10),
+            ( 8, 3), ( 8, 4), ( 8, 5), ( 8, 6), ( 8, 7), ( 8, 8), ( 8, 9), ( 8,10),
+                ( 9, 4), ( 9, 5), ( 9, 6), ( 9, 7), ( 9, 8), ( 9, 9), ( 9,10),
+                    (10, 5), (10, 6), (10, 7), (10, 8), (10, 9), (10,10),
+];
+
+pub const COORDS_TO_IX: &'static[&'static[usize]] = &[
+    &[ 0, 1, 2, 3, 4, 5],
+    &[ 6, 7, 8, 9,10,11,12],
+    &[13,14,15,16,17,18,19,20],
+    &[21,22,23,24,25,26,27,28,29],
+    &[30,31,32,33,34,35,36,37,38,39],
+    &[40,41,42,43,44,45,46,47,48,49,50],
+    &[51,52,53,54,55,56,57,58,59,60],
+    &[61,62,63,64,65,66,67,68,69],
+    &[70,71,72,73,74,75,76,77],
+    &[78,79,80,81,82,83,84],
+    &[85,86,87,88,89,90],
+];
+
 /// A horizontally-aligned hex grid of vertically-aligned hexes, of side length 6
-pub struct Board([Option<Atom>; 91]);
+pub const CELL_COUNT: usize = 91;
+pub struct Board([Option<Atom>; CELL_COUNT]);
 
 impl PartialEq for Board {
     fn eq(&self, other: &Self) -> bool {
@@ -18,46 +50,16 @@ impl Debug for Board {
     }
 }
 
-const ROW_COUNT: usize = 11;
-const ROW_WIDTHS: [u8; ROW_COUNT] = [6, 7, 8, 9, 10, 11, 10, 9, 8, 7, 6];
-
 impl Board {
-    pub fn valid_ix(x: isize, y: isize) -> bool {
-        if x < 0 || y < 0 { return false; }
-        let x = x as usize;
-        let y = y as usize;
-        // y = 0, 10 => width = 6, 
-        // y = 1, 9 => width = 7
-        let half_way = ROW_COUNT/2;
-        let from_horizontal = if x > half_way {
-            x - half_way
-        } else {
-            half_way - x
-        };
-
-        if from_horizontal > ROW_COUNT {
-            panic!("Somehow calculated a negative width board {:?}", from_horizontal);
-        }        
-        let width = ROW_COUNT - from_horizontal;
-        y < ROW_COUNT && x < width
+    pub fn get<'a>(&'a self, x: isize, y: isize) -> Option<&'a Option<Atom>> {
+        if x < 0 || y < 0 { return None; }
+        COORDS_TO_IX.get(y as usize).and_then(|xs| xs.get(x as usize)).map(|ix| &self.0[*ix])
     }
 
-
-    pub fn get(&self, x: isize, y: isize) -> Option<&Option<Atom>> {
-        if !Self::valid_ix(x, y) { return None }
-        let x = x as usize; // Valid indexes are always positive
-        let y = y as usize;
-        let mut current_index: u8 = 0;
-        for i in 0 .. ROW_COUNT {
-            if x == i {
-                let board_index = current_index as usize + y;
-                return Some(& self.0[board_index]);
-            } else {
-                current_index += ROW_WIDTHS[i];
-            }
-            unreachable!();
-        }
-        None
+    pub fn get_mut<'a>(&'a mut self, x: isize, y: isize) -> Option<&'a mut Option<Atom>> {
+        if x < 0 || y < 0 { return None; }
+        // COORDS_TO_IX.get(y as usize).and_then(|xs| xs.get(x as usize)).map(|ix| &mut self.0[*ix])
+        unimplemented!()
     }
 
     pub fn parse<'a, S: Into<&'a str>>(string: S) -> Option<Board> {

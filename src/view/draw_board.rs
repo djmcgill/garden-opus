@@ -19,20 +19,20 @@ pub fn draw_hex<G>(c: Context, g: &mut G) where G: Graphics {
     polygon(RED, HEX_COORDS, c.transform, g);
 }
 
-const FIRE_SYMBOL: & 'static str = "🜂";
-const AIR_SYMBOL: & 'static str = "🜁";
-const WATER_SYMBOL: & 'static str = "🜄";
-const EARTH_SYMBOL: & 'static str = "🜃";
-const LEAD_SYMBOL: & 'static str = "♄";
-const TIN_SYMBOL: & 'static str = "♃";
-const IRON_SYMBOL: & 'static str = "♂";
-const COPPER_SYMBOL: & 'static str = "♀";
-const SILVER_SYMBOL: & 'static str = "☽";
-const GOLD_SYMBOL: & 'static str = "☉";
-const VITAE_SYMBOL: & 'static str = "🜍";
-const MORS_SYMBOL: & 'static str = "🜞";
-const QUICKSILVER_SYMBOL: & 'static str = "☿";
-const SALT_SYMBOL: & 'static str = "🜔";
+pub const FIRE_SYMBOL: & 'static str = "🜂";
+pub const AIR_SYMBOL: & 'static str = "🜁";
+pub const WATER_SYMBOL: & 'static str = "🜄";
+pub const EARTH_SYMBOL: & 'static str = "🜃";
+pub const LEAD_SYMBOL: & 'static str = "♄";
+pub const TIN_SYMBOL: & 'static str = "♃";
+pub const IRON_SYMBOL: & 'static str = "♂";
+pub const COPPER_SYMBOL: & 'static str = "♀";
+pub const SILVER_SYMBOL: & 'static str = "☽";
+pub const GOLD_SYMBOL: & 'static str = "☉";
+pub const VITAE_SYMBOL: & 'static str = "🜍";
+pub const MORS_SYMBOL: & 'static str = "🜞";
+pub const QUICKSILVER_SYMBOL: & 'static str = "☿";
+pub const SALT_SYMBOL: & 'static str = "🜔";
 
 // fn draw_atom(atom: &Atom) {
 //     match *atom {

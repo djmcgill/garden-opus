@@ -1,6 +1,7 @@
 pub mod draw_board;
 
 use graphics::*;
+use ::model::board::{CELL_COUNT, IX_TO_COORDS};
 use ::controller::BoardController;
 use graphics::character::CharacterCache;
 use std::fmt::Debug;
@@ -13,9 +14,25 @@ impl BoardView {
 
     pub fn draw<G: Graphics, E: Debug, C>(&self, controller: &BoardController, c: &Context, g: &mut G, glyphs: &mut C)
     where C: CharacterCache<Texture=G::Texture, Error=E> {
-        const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-        draw_board::draw_hex(c.reset(), g);
+        let base_c = c.reset().scale(0.1, 0.1);
+        for i in 0..CELL_COUNT {
+            let (y, x) = IX_TO_COORDS[i];
+            let yf = y as f64;
+            let xf = x as f64;
+            let x_x = 1.0;
+            let x_y = 0.0;
+            let y_x = -0.5;
+            let y_y = 0.75;
+            let new_c = base_c
+                .trans(xf * x_x, xf * x_y)
+                .trans(yf * y_x, yf * y_y);
+            draw_board::draw_hex(new_c, g);            
+        }
+
+        // draw_board::draw_hex(c.reset().scale(0.1, 0.1), g);
+
         let transform = c.transform.trans(400.0, 400.0);
-        text(BLACK, 50, "a", glyphs, transform, g).unwrap();
+        const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
+        text(BLACK, 50, draw_board::QUICKSILVER_SYMBOL, glyphs, transform, g).unwrap();
     }
 }
