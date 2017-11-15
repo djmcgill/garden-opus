@@ -47,9 +47,10 @@ fn main() {
     while let Some(e) = events.next(&mut window) {
         board_controller.event(&e);
         if let Some(args) = e.render_args() {
-            const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+            const GREY: [f32; 4] = [56.0/255.0, 89.0/255.0, 82.0/255.0, 1.0];
+
             gl.draw(args.viewport(), |c, gl| {
-                clear(GREEN, gl);
+                clear(GREY, gl);
                 board_view.draw(&board_controller, &c, gl, glyphs);
             });
         }

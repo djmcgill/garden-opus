@@ -19,17 +19,15 @@ impl BoardView {
             let (y, x) = IX_TO_COORDS[i];
             let yf = y as f64;
             let xf = x as f64;
-            let x_x = 1.0;
+            let x_x = 1.0 * draw_board::HEX_WIDTH;
             let x_y = 0.0;
-            let y_x = -0.5;
-            let y_y = 0.75;
+            let y_x = -0.5 * draw_board::HEX_WIDTH;
+            let y_y = 0.75 * draw_board::HEX_HEIGHT;
             let new_c = base_c
                 .trans(xf * x_x, xf * x_y)
                 .trans(yf * y_x, yf * y_y);
             draw_board::draw_hex(new_c, g);            
         }
-
-        // draw_board::draw_hex(c.reset().scale(0.1, 0.1), g);
 
         let transform = c.transform.trans(400.0, 400.0);
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];

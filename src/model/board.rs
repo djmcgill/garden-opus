@@ -58,8 +58,7 @@ impl Board {
 
     pub fn get_mut<'a>(&'a mut self, x: isize, y: isize) -> Option<&'a mut Option<Atom>> {
         if x < 0 || y < 0 { return None; }
-        // COORDS_TO_IX.get(y as usize).and_then(|xs| xs.get(x as usize)).map(|ix| &mut self.0[*ix])
-        unimplemented!()
+        COORDS_TO_IX.get(y as usize).and_then(|xs| xs.get(x as usize)).map(move |ix| &mut self.0[*ix])
     }
 
     pub fn parse<'a, S: Into<&'a str>>(string: S) -> Option<Board> {

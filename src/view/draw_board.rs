@@ -1,22 +1,22 @@
 use ::model::elements::Atom;
 use graphics::*;
 
-const HEX_HEIGHT: f64 = 1.0;
-const HEX_WIDTH: f64 = 0.86602540378 * HEX_HEIGHT; // sqrt(3)/2
+pub const HEX_HEIGHT: f64 = 1.0;
+pub const HEX_WIDTH: f64 = 0.86602540378 * HEX_HEIGHT; // sqrt(3)/2
 const HEX_COORDS: &'static [[f64; 2]] = &[
-    [ HEX_HEIGHT/2.0,            0.0],
-    [ HEX_HEIGHT/4.0,  HEX_WIDTH/2.0],
-    [            0.0,  HEX_WIDTH/2.0],
-    [-HEX_HEIGHT/4.0,  HEX_WIDTH/2.0],
-    [-HEX_HEIGHT/2.0,            0.0],
-    [-HEX_HEIGHT/4.0, -HEX_WIDTH/2.0],
-    [            0.0, -HEX_WIDTH/2.0],
-    [ HEX_HEIGHT/4.0, -HEX_WIDTH/2.0],
+    [           0.0,  HEX_HEIGHT/2.0],
+    [ HEX_WIDTH/2.0,  HEX_HEIGHT/4.0],
+    [ HEX_WIDTH/2.0,             0.0],
+    [ HEX_WIDTH/2.0, -HEX_HEIGHT/4.0],
+    [           0.0, -HEX_HEIGHT/2.0],
+    [-HEX_WIDTH/2.0, -HEX_HEIGHT/4.0],
+    [-HEX_WIDTH/2.0,             0.0],
+    [-HEX_WIDTH/2.0,  HEX_HEIGHT/4.0],
 ];
 
-const RED: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
+const ORANGE: [f32; 4] = [189.0/255.0, 148.0/255.0, 49.0/255.0, 1.0];
 pub fn draw_hex<G>(c: Context, g: &mut G) where G: Graphics {
-    polygon(RED, HEX_COORDS, c.transform, g);
+    polygon(ORANGE, HEX_COORDS, c.transform, g);
 }
 
 pub const FIRE_SYMBOL: & 'static str = "🜂";
