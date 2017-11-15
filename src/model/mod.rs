@@ -8,9 +8,9 @@ use cgmath::*;
 
 #[derive(PartialEq, Debug)]
 pub struct GameState {
-    board: Board,
-    selected_tile: Option<[isize;2]>, // The hex x, y index from the top left.
-    active_metal: Option<BaseMetal>, // The metal that can be combined with quicksilver, if any.
+    pub board: Board,
+    pub selected_tile: Option<(usize, usize)>, // The hex x, y index from the top left.
+    pub active_metal: Option<BaseMetal>, // The metal that can be combined with quicksilver, if any.
 }
 
 impl GameState {
@@ -22,8 +22,8 @@ impl GameState {
         }
     }
 
-    pub fn select_tile(&mut self, x: isize, y: isize) {
-        if let Some(tile) = self.board.get_mut(x, y) {
+    pub fn select_tile(&mut self, x: usize, y: usize) {
+        if let Some(tile) = self.board.get_mut(x as isize, y as isize) {
             if let Some(atom@Atom::BaseMetal(BaseMetal::Gold)) = *tile {
                 // Gold was selected
                 if self.active_metal == Some(BaseMetal::Gold) {
@@ -36,7 +36,7 @@ impl GameState {
                     unimplemented!(); // Check for matches
                 } else {
                     // TODO: check for valid selectable tile
-                    self.selected_tile = Some([x, y])
+                    self.selected_tile = Some((x, y))
                 }
             }
         }

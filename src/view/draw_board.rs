@@ -14,9 +14,8 @@ const HEX_COORDS: &'static [[f64; 2]] = &[
     [-HEX_WIDTH/2.0,  HEX_HEIGHT/4.0],
 ];
 
-const ORANGE: [f32; 4] = [189.0/255.0, 148.0/255.0, 49.0/255.0, 1.0];
-pub fn draw_hex<G>(c: Context, g: &mut G) where G: Graphics {
-    polygon(ORANGE, HEX_COORDS, c.transform, g);
+pub fn draw_hex<G>(colour: [f32; 4], c: Context, g: &mut G) where G: Graphics {
+    polygon(colour, HEX_COORDS, c.transform, g);
 }
 
 pub const FIRE_SYMBOL: & 'static str = "🜂";

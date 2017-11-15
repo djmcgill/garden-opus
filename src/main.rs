@@ -38,7 +38,8 @@ fn main() {
     ).expect("Could not load font");
 
 
-    let board = model::GameState::new();
+    let mut board = model::GameState::new();
+    board.selected_tile = Some((1, 3));
     let mut board_controller = controller::BoardController::new(board);
     let board_view = view::BoardView::new();
     let mut gl = GlGraphics::new(opengl_version);

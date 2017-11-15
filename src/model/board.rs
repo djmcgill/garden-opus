@@ -72,11 +72,6 @@ impl Board {
         Some(board)
     }
 
-/* 
-        x,y-1    x+1,y-1
-     x-1,y    x,y     x+1,y
-        x,y+1     x+1,y+1
-*/
     // Are there three concurrent free tiles around this one?
     pub fn is_available(&self, x: isize, y: isize) -> bool {
         let neighbour_ixs = &[(x, y-1), (x+1,y-1), (x-1,y), (x+1,y), (x,y+1),(x+1,y+1)];
