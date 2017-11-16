@@ -1,4 +1,3 @@
-use ::model::elements::Atom;
 use graphics::*;
 
 pub const HEX_HEIGHT: f64 = 1.0;

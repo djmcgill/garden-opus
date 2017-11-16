@@ -1,17 +1,52 @@
 pub mod board;
 use self::board::*;
 
-pub mod elements;
-use self::elements::*;
+pub mod atom;
+use self::atom::*;
 
-use cgmath::*;
+mod hex;
+pub use self::hex::*;
 
-#[derive(PartialEq, Debug)]
+#[derive(Debug)]
 pub struct GameState {
     pub board: Board,
     pub selected_tile: Option<(usize, usize)>, // The hex x, y index from the top left.
     pub active_metal: Option<BaseMetal>, // The metal that can be combined with quicksilver, if any.
 }
+
+const WATER: Option<Atom> = Some(Atom::BaseElement(BaseElement::Water));
+const AIR: Option<Atom> = Some(Atom::BaseElement(BaseElement::Air));
+const FIRE: Option<Atom> = Some(Atom::BaseElement(BaseElement::Fire));
+const EARTH: Option<Atom> = Some(Atom::BaseElement(BaseElement::Earth));
+const SALT: Option<Atom> = Some(Atom::Salt);
+const QS: Option<Atom> = Some(Atom::Quicksilver);
+const MORS: Option<Atom> = Some(Atom::Januae(Januae::Mors));
+const VITAE: Option<Atom> = Some(Atom::Januae(Januae::Vitae));
+const LEAD: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Lead));
+const TIN: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Tin));
+const IRON: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Iron));
+const COPPER: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Copper));
+const SILVER: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Silver));
+const GOLD: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Gold));
+pub const SAMPLE_GAME: GameState = GameState {
+    selected_tile: None,
+    active_metal: Some(BaseMetal::Lead),
+    board: Board(
+        [
+            None, WATER, None, None, None, None,
+            None, SALT, EARTH, AIR, AIR, QS, MORS,
+            None, MORS, WATER, FIRE, None, WATER, VITAE, None,
+            None, EARTH, None, COPPER, IRON, EARTH, SALT, AIR, None,
+            SALT, QS, FIRE, EARTH, None, None, VITAE, None, WATER, None,
+            None, AIR, QS, EARTH, None, GOLD, None, QS, VITAE, AIR, None,
+            None, SILVER, None, AIR, None, None, FIRE, VITAE, WATER, WATER,
+            None, EARTH, MORS, MORS, QS, FIRE, None, LEAD, None,
+            None, FIRE, WATER, None, EARTH, SALT, EARTH, None,
+            AIR, FIRE, TIN, WATER, FIRE, FIRE, None,
+            None, None, None, None, AIR, None,
+        ]
+    )
+};
 
 impl GameState {
     pub fn new() -> Self {

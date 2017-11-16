@@ -37,7 +37,7 @@ impl Atom {
             _ => false,
         }
     }
-// Lead, Tin, Iron, Copper, Silver, Gold,
+
     pub fn parse(c: char) -> Option<Option<Self>> {
         use self::Atom::*;
         use self::BaseElement::*;
@@ -62,18 +62,15 @@ impl Atom {
             '.' => Some(None),
             _ => None,
         }
-
     }
-    
 }
 
 #[cfg(test)]
 mod tests {
-    use super::BaseMetal;
+    use super::*;
     use super::BaseMetal::*;
     use super::BaseElement::*;
     use super::Januae::*;
-    use super::Atom;
     use super::Atom::*;
 
     const ALL_AVAILABLE_METALS: [Option<BaseMetal>; 7] = [Some(Lead), Some(Tin), Some(Iron), Some(Copper), Some(Silver), Some(Gold), None,];
