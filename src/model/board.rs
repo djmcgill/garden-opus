@@ -17,14 +17,12 @@ impl Board {
         Board([None; 91])
     }
 
-    pub fn get<'a>(&'a self, x: isize, y: isize) -> Option<&'a Option<Atom>> {
-        if x < 0 || y < 0 { return None; }
-        COORDS_TO_IX.get(y as usize).and_then(|xs| xs.get(x as usize)).map(|ix| &self.0[*ix])
+    pub fn get(&self, x: usize, y: usize) -> Option<&Option<Atom>> {
+        COORDS_TO_IX.get(y).and_then(|xs| xs.get(x)).map(|ix| &self.0[*ix])
     }
 
-    pub fn get_mut<'a>(&'a mut self, x: isize, y: isize) -> Option<&'a mut Option<Atom>> {
-        if x < 0 || y < 0 { return None; }
-        COORDS_TO_IX.get(y as usize).and_then(|xs| xs.get(x as usize)).map(move |ix| &mut self.0[*ix])
+    pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut Option<Atom>> {
+        COORDS_TO_IX.get(y).and_then(|xs| xs.get(x)).map(move |ix| &mut self.0[*ix])
     }
 
     pub fn parse<'a, S: Into<&'a str>>(string: S) -> Option<Board> {
@@ -33,11 +31,14 @@ impl Board {
 
     // Are there three concurrent free tiles around this one?
     pub fn is_available(&self, x: isize, y: isize) -> bool {
-        let neighbour_ixs = &[(x, y-1), (x+1,y-1), (x-1,y), (x+1,y), (x,y+1),(x+1,y+1)];
-        let available_neighbours = neighbour_ixs.into_iter().map(|&(n_x, n_y)| {
-            let tile = self.get(n_x, n_y);
-            tile.is_none() || tile.unwrap().is_none()
-        }).collect::<Vec<_>>();
+        const NEIGHBOUR_COUNT: usize = 6;
+        let neighbour_ixs: [(isize, isize); NEIGHBOUR_COUNT] = [(x, y-1), (x+1,y-1), (x-1,y), (x+1,y), (x,y+1),(x+1,y+1)];
+        let available_neighbours = (&neighbour_ixs).into_iter().map(|&(n_x, n_y)| {
+            n_x >= 0 && n_y >= 0 && {
+                let tile = self.get(n_x as usize, n_y as usize);
+                tile.is_none() || tile.unwrap().is_none()
+            }
+        }).collect::<Vec<_>>(); // TODO: smallvec or array or bitvec this - BENCHMARK always has length 6
         has_seq_3_or_longer(&available_neighbours)
     }
 }

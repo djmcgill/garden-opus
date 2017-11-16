@@ -43,9 +43,29 @@ pub const HEX_BASIS_TO_MODEL: [[f64; 3]; 2] = [
     [0.0 * HEX_HEIGHT, -0.75 * HEX_HEIGHT, 0.0],
 ];
 
-const DET: f64 = 1.0 * HEX_WIDTH * -0.75 * HEX_HEIGHT;
+const DET: f64 = HEX_BASIS_TO_MODEL[0][0] * HEX_BASIS_TO_MODEL[1][1]
+               - HEX_BASIS_TO_MODEL[0][1] * HEX_BASIS_TO_MODEL[1][0];
 /// Inverse of HEX_BASIS_TO_MODEL
 pub const MODEL_BASIS_TO_HEX: [[f64; 3]; 2] = [
-    [-0.75 * HEX_HEIGHT/DET, 0.5 * HEX_WIDTH/DET, 0.0],
-    [ 0.0  * HEX_HEIGHT/DET, 1.0 * HEX_WIDTH/DET, 0.0]
+    [ HEX_BASIS_TO_MODEL[1][1]/DET, -HEX_BASIS_TO_MODEL[0][1]/DET, 0.0],
+    [-HEX_BASIS_TO_MODEL[1][0]/DET,  HEX_BASIS_TO_MODEL[0][0]/DET, 0.0]
 ];
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use graphics::math::*;
+
+    #[test]
+    fn inverse_is_correct() {
+        const EPS:f64 = 0.001;
+        let forward_result = multiply(HEX_BASIS_TO_MODEL, MODEL_BASIS_TO_HEX);
+        assert!((forward_result[0][0] - 1.0).abs() < EPS);
+        assert!((forward_result[0][1] - 0.0).abs() < EPS);
+        assert!((forward_result[0][2] - 0.0).abs() < EPS);
+
+        assert!((forward_result[1][0] - 0.0).abs() < EPS);
+        assert!((forward_result[1][1] - 1.0).abs() < EPS);
+        assert!((forward_result[1][2] - 0.0).abs() < EPS);
+    }
+}

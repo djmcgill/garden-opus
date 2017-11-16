@@ -13,21 +13,6 @@ pub struct GameState {
     pub selected_tile: Option<(usize, usize)>, // The hex x, y index from the top left.
     pub active_metal: Option<BaseMetal>, // The metal that can be combined with quicksilver, if any.
 }
-
-const WATER: Option<Atom> = Some(Atom::BaseElement(BaseElement::Water));
-const AIR: Option<Atom> = Some(Atom::BaseElement(BaseElement::Air));
-const FIRE: Option<Atom> = Some(Atom::BaseElement(BaseElement::Fire));
-const EARTH: Option<Atom> = Some(Atom::BaseElement(BaseElement::Earth));
-const SALT: Option<Atom> = Some(Atom::Salt);
-const QS: Option<Atom> = Some(Atom::Quicksilver);
-const MORS: Option<Atom> = Some(Atom::Januae(Januae::Mors));
-const VITAE: Option<Atom> = Some(Atom::Januae(Januae::Vitae));
-const LEAD: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Lead));
-const TIN: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Tin));
-const IRON: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Iron));
-const COPPER: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Copper));
-const SILVER: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Silver));
-const GOLD: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Gold));
 pub const SAMPLE_GAME: GameState = GameState {
     selected_tile: None,
     active_metal: Some(BaseMetal::Lead),
@@ -58,7 +43,7 @@ impl GameState {
     }
 
     pub fn select_tile(&mut self, x: usize, y: usize) {
-        if let Some(tile) = self.board.get_mut(x as isize, y as isize) {
+        if let Some(tile) = self.board.get_mut(x, y) {
             if let Some(atom@Atom::BaseMetal(BaseMetal::Gold)) = *tile {
                 // Gold was selected
                 if self.active_metal == Some(BaseMetal::Gold) {

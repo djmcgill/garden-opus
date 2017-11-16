@@ -65,12 +65,28 @@ impl Atom {
     }
 }
 
+pub const WATER : Option<Atom> = Some(Atom::BaseElement(BaseElement::Water));
+pub const AIR   : Option<Atom> = Some(Atom::BaseElement(BaseElement::Air));
+pub const FIRE  : Option<Atom> = Some(Atom::BaseElement(BaseElement::Fire));
+pub const EARTH : Option<Atom> = Some(Atom::BaseElement(BaseElement::Earth));
+pub const SALT  : Option<Atom> = Some(Atom::Salt);
+pub const QS    : Option<Atom> = Some(Atom::Quicksilver);
+pub const MORS  : Option<Atom> = Some(Atom::Januae(Januae::Mors));
+pub const VITAE : Option<Atom> = Some(Atom::Januae(Januae::Vitae));
+pub const LEAD  : Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Lead));
+pub const TIN   : Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Tin));
+pub const IRON  : Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Iron));
+pub const COPPER: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Copper));
+pub const SILVER: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Silver));
+pub const GOLD  : Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Gold));
+
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::BaseMetal;
     use super::BaseMetal::*;
     use super::BaseElement::*;
     use super::Januae::*;
+    use super::Atom;
     use super::Atom::*;
 
     const ALL_AVAILABLE_METALS: [Option<BaseMetal>; 7] = [Some(Lead), Some(Tin), Some(Iron), Some(Copper), Some(Silver), Some(Gold), None,];
