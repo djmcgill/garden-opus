@@ -34,6 +34,10 @@ pub fn hex_coords_offset(x: usize, y: usize) -> [f64;2] {
     let v = [x as f64, y as f64];
     transform_vec(HEX_BASIS_TO_MODEL, v)
 }
+pub fn model_to_hex(x: f64, y: f64) -> (isize, isize) {
+    let xy = transform_vec(MODEL_BASIS_TO_HEX, [x, y]);
+    (xy[0].round() as isize, xy[1].round() as isize)
+}
 pub const HEX_HEIGHT: f64 = 1.0;
 pub const HEX_WIDTH: f64 = 0.86602540378 * HEX_HEIGHT; // sqrt(3)/2
 

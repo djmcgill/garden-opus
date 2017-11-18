@@ -6,8 +6,10 @@ use ::model::{hex_coords_offset, IX_TO_COORDS};
 use ::controller::BoardController;
 use graphics::character::CharacterCache;
 use std::fmt::Debug;
-pub struct BoardView;
 use graphics::math::translate;
+
+/// Contains the information used to display the board on the screen
+pub struct BoardView;
 
 impl BoardView {
     pub fn new() -> Self {
@@ -35,18 +37,21 @@ impl BoardView {
         }
         // Draw labels
         for i in 0..CELL_COUNT {
-            let (x, y) = IX_TO_COORDS[i];
-            let xy_offset = hex_coords_offset(x, y);
-            const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-            const GREY: [f32; 4] = [0.3, 0.3, 0.3, 1.0];
-            let transform =
-                c.transform
-                 .trans(400.,400.) // TODO: Is there not some better way to go to the center?
-                 .trans(-6.,4.)
-                 .prepend_transform(
-                     translate([xy_offset[0] * SCALE, xy_offset[1] * SCALE])
-                 );
-            text(BLACK, 20, &"a", glyphs, transform, g).unwrap();
+            for ref atom in controller.board.board.0[i] {
+                let (x, y) = IX_TO_COORDS[i];
+                let xy_offset = hex_coords_offset(x, y);
+                let hex_transformation = translate([xy_offset[0] * SCALE, xy_offset[1] * SCALE]);
+                const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
+                const GREY: [f32; 4] = [0.3, 0.3, 0.3, 1.0];
+                let ref label = atom.print();
+                let transform =
+                    c.transform
+                    .trans(400.,400.) // TODO: Is there not some better way to go to the center?
+                    .trans(-6.,4.)
+                    .prepend_transform(hex_transformation);
+                let colour = if controller.board.board.is_available(x as isize, y as isize) { BLACK } else { GREY };
+                text(colour, 20, label, glyphs, transform, g).unwrap();
+            }
         }
     }
 }

@@ -54,9 +54,5 @@ fn main() {
                 board_view.draw(&board_controller, &c, gl, glyphs);
             });
         }
-
-        // if let Some(xy) = e.mouse_cursor_args() {
-        //     app.current_mouse_pos = Vector2::from(xy);
-        // }
     }
 }

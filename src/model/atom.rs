@@ -22,6 +22,7 @@ pub enum Atom {
     Salt,
 }
 
+
 impl Atom {
     pub fn is_match(a1: &Atom, a2: &Atom, active_metal: &Option<BaseMetal>) -> bool {
         use self::Atom::*;
@@ -38,6 +39,25 @@ impl Atom {
         }
     }
 
+    pub fn print(&self) -> &'static str {
+        match *self {
+            Atom::BaseElement(BaseElement::Water) => WATER_CHAR,
+            Atom::BaseElement(BaseElement::Air) => AIR_CHAR,
+            Atom::BaseElement(BaseElement::Fire) => FIRE_CHAR,
+            Atom::BaseElement(BaseElement::Earth) => EARTH_CHAR,
+            Atom::Salt => SALT_CHAR,
+            Atom::Quicksilver => QS_CHAR,
+            Atom::Januae(Januae::Mors) => MORS_CHAR,
+            Atom::Januae(Januae::Vitae) => VITAE_CHAR,
+            Atom::BaseMetal(BaseMetal::Lead) => LEAD_CHAR,
+            Atom::BaseMetal(BaseMetal::Tin) => TIN_CHAR,
+            Atom::BaseMetal(BaseMetal::Iron) => IRON_CHAR,
+            Atom::BaseMetal(BaseMetal::Copper) => COPPER_CHAR,
+            Atom::BaseMetal(BaseMetal::Silver) => SILVER_CHAR,
+            Atom::BaseMetal(BaseMetal::Gold) => GOLD_CHAR,
+        }
+    }
+
     pub fn parse(c: char) -> Option<Option<Self>> {
         use self::Atom::*;
         use self::BaseElement::*;
@@ -51,12 +71,12 @@ impl Atom {
             'e' => Some(Some(BaseElement(Earth))),
             's' => Some(Some(Salt)),
             'q' => Some(Some(Quicksilver)),
-            'l' => Some(Some(BaseMetal(Lead))),
-            't' => Some(Some(BaseMetal(Tin))),
-            'i' => Some(Some(BaseMetal(Iron))),
-            'c' => Some(Some(BaseMetal(Copper))),
-            'r' => Some(Some(BaseMetal(Silver))),
-            'g' => Some(Some(BaseMetal(Gold))),
+            '1' => Some(Some(BaseMetal(Lead))),
+            '2' => Some(Some(BaseMetal(Tin))),
+            '3' => Some(Some(BaseMetal(Iron))),
+            '4' => Some(Some(BaseMetal(Copper))),
+            '5' => Some(Some(BaseMetal(Silver))),
+            '6' => Some(Some(BaseMetal(Gold))),
             '^' => Some(Some(Januae(Vitae))), 
             'v' => Some(Some(Januae(Mors))),
             '.' => Some(None),
@@ -79,6 +99,21 @@ pub const IRON  : Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Iron));
 pub const COPPER: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Copper));
 pub const SILVER: Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Silver));
 pub const GOLD  : Option<Atom> = Some(Atom::BaseMetal(BaseMetal::Gold));
+
+pub const WATER_CHAR : &'static str = "w";
+pub const AIR_CHAR   : &'static str = "a";
+pub const FIRE_CHAR  : &'static str = "f";
+pub const EARTH_CHAR : &'static str = "e";
+pub const SALT_CHAR  : &'static str = "s";
+pub const QS_CHAR    : &'static str = "q";
+pub const MORS_CHAR  : &'static str = "v";
+pub const VITAE_CHAR : &'static str = "^";
+pub const LEAD_CHAR  : &'static str = "1";
+pub const TIN_CHAR   : &'static str = "2";
+pub const IRON_CHAR  : &'static str = "3";
+pub const COPPER_CHAR: &'static str = "4";
+pub const SILVER_CHAR: &'static str = "5";
+pub const GOLD_CHAR  : &'static str = "6";
 
 #[cfg(test)]
 mod tests {
