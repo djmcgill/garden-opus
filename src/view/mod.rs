@@ -18,10 +18,9 @@ impl BoardView {
 
     pub fn draw<G: Graphics, E: Debug, C>(&self, controller: &BoardController, c: &Context, g: &mut G, glyphs: &mut C)
     where C: CharacterCache<Texture=G::Texture, Error=E> {
-        const SCALE: f64 = 0.1;
         const ORANGE: [f32; 4] = [189.0/255.0, 148.0/255.0, 49.0/255.0, 1.0];
         const DARK_ORANGE: [f32; 4] = [139.0/255.0, 118.0/255.0, 19.0/255.0, 1.0];
-        let base_c = c.reset().scale(SCALE, SCALE);
+        let base_c = c.reset().scale(controller.hex_scale, controller.hex_scale);
         // Draw background hexes
         for i in 0..CELL_COUNT {
             let (x, y) = IX_TO_COORDS[i];
@@ -40,7 +39,7 @@ impl BoardView {
             for ref atom in controller.board.board.0[i] {
                 let (x, y) = IX_TO_COORDS[i];
                 let xy_offset = hex_coords_offset(x, y);
-                let hex_transformation = translate([xy_offset[0] * SCALE, xy_offset[1] * SCALE]);
+                let hex_transformation = translate([xy_offset[0] * controller.hex_scale, xy_offset[1] * controller.hex_scale]);
                 const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
                 const GREY: [f32; 4] = [0.3, 0.3, 0.3, 1.0];
                 let ref label = atom.print();

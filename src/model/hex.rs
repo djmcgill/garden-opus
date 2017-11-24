@@ -34,9 +34,45 @@ pub fn hex_coords_offset(x: usize, y: usize) -> [f64;2] {
     let v = [x as f64, y as f64];
     transform_vec(HEX_BASIS_TO_MODEL, v)
 }
-pub fn model_to_hex(x: f64, y: f64) -> (isize, isize) {
-    let xy = transform_vec(MODEL_BASIS_TO_HEX, [x, y]);
-    (xy[0].round() as isize, xy[1].round() as isize)
+pub fn model_to_hex(ix: f64, iy: f64) -> (isize, isize) {
+    /*
+    model_to_hex called with (0.19980, -0.20624)
+    transformed coords (0.36821, 0.27499)
+    diffs 0.36821 0.27499 0.35678
+    ret (1, 0)
+
+    model_to_hex called with (0.19384, -0.20624)
+    transformed coords (0.36133, 0.27499)
+    diffs 0.36133 0.27499 0.36366
+    ret (0, 0)
+    */
+    let xy = transform_vec(MODEL_BASIS_TO_HEX, [ix, iy]);
+    let x = xy[0];
+    let y = xy[1];
+    let z = -x-y;
+    let rx = x.round();
+    let ry = y.round();
+    let rz = z.round();
+
+    let x_diff = (rx - x).abs();
+    let y_diff = (ry - y).abs();
+    let z_diff = (rz - z).abs();
+
+    let ret;
+    if x_diff > y_diff && x_diff > z_diff {
+        let rx = -ry-rz;
+        ret = (rx.round() as isize, ry.round() as isize);
+    } else if y_diff > z_diff {
+        let ry = -rx-rz;
+        ret = (rx.round() as isize, ry.round() as isize);
+    } else {
+        ret = (rx.round() as isize, ry.round() as isize);
+    }
+    println!("model_to_hex called with ({}, {})", ix, iy);
+    println!("transformed coords ({}, {})", x, y);
+    println!("diffs {} {} {}", x_diff, y_diff, z_diff);
+    println!("ret {:?}", ret);
+    ret
 }
 pub const HEX_HEIGHT: f64 = 1.0;
 pub const HEX_WIDTH: f64 = 0.86602540378 * HEX_HEIGHT; // sqrt(3)/2

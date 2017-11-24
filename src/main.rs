@@ -39,7 +39,12 @@ fn main() {
 
     let mut board = model::SAMPLE_GAME;
     board.selected_tile = Some((1, 3));
-    let mut board_controller = controller::BoardController::new(board);
+    let mut board_controller = controller::BoardController {
+        board: board,
+        window_width: width,
+        window_height: height,
+        hex_scale: 0.1,
+    };
     let board_view = view::BoardView::new();
     let mut gl = GlGraphics::new(opengl_version);
 
