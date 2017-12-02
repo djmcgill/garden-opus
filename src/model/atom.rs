@@ -30,10 +30,8 @@ impl Atom {
         match (a1, a2) {
             (&BaseElement(ref e1), &BaseElement(ref e2)) => e1 == e2,
             (&Salt, &Salt) => true,
-            (&BaseElement(_), &Salt) => true,
-            (&Salt, &BaseElement(_)) => true,
-            (&Quicksilver, &BaseMetal(ref m)) if *m != BaseMetal::Gold => active_metal.into_iter().any(|am| m <= am),
-            (&BaseMetal(ref m), &Quicksilver) if *m != BaseMetal::Gold => active_metal.into_iter().any(|am| m <= am),
+            (&BaseElement(_), &Salt) | (&Salt, &BaseElement(_)) => true,
+            (&Quicksilver, &BaseMetal(ref m)) | (&BaseMetal(ref m), &Quicksilver) if *m != BaseMetal::Gold => active_metal.into_iter().any(|am| m <= am),
             (&Januae(ref j1), &Januae(ref j2)) => j1 != j2,
             _ => false,
         }
@@ -164,7 +162,88 @@ mod tests {
 
     #[test]
     fn metal_match() {
-        unimplemented!(); // TODO
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Lead), &Some(Lead)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Tin), &Some(Lead)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Iron), &Some(Lead)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Copper), &Some(Lead)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Silver), &Some(Lead)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Gold), &Some(Lead)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Lead), &Some(Tin)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Tin), &Some(Tin)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Iron), &Some(Tin)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Copper), &Some(Tin)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Silver), &Some(Tin)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Gold), &Some(Tin)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Lead), &Some(Iron)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Tin), &Some(Iron)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Iron), &Some(Iron)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Copper), &Some(Iron)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Silver), &Some(Iron)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Gold), &Some(Iron)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Lead), &Some(Copper)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Tin), &Some(Copper)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Iron), &Some(Copper)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Copper), &Some(Copper)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Silver), &Some(Copper)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Gold), &Some(Copper)));        
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Lead), &Some(Silver)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Tin), &Some(Silver)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Iron), &Some(Silver)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Copper), &Some(Silver)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Silver), &Some(Silver)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Gold), &Some(Silver)));  
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Lead), &Some(Gold)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Tin), &Some(Gold)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Iron), &Some(Gold)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Copper), &Some(Gold)));
+        assert!(Atom::is_match(&Quicksilver, &BaseMetal(Silver), &Some(Gold)));
+        assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Gold), &Some(Gold)));
+
+        // Reverse
+        assert!(Atom::is_match(&BaseMetal(Lead), &Quicksilver, &Some(Lead)));
+        assert!(!Atom::is_match(&BaseMetal(Tin), &Quicksilver, &Some(Lead)));
+        assert!(!Atom::is_match(&BaseMetal(Iron), &Quicksilver, &Some(Lead)));
+        assert!(!Atom::is_match(&BaseMetal(Copper), &Quicksilver, &Some(Lead)));
+        assert!(!Atom::is_match(&BaseMetal(Silver), &Quicksilver, &Some(Lead)));
+        assert!(!Atom::is_match(&BaseMetal(Gold), &Quicksilver, &Some(Lead)));
+        assert!(Atom::is_match(&BaseMetal(Lead), &Quicksilver, &Some(Tin)));
+        assert!(Atom::is_match(&BaseMetal(Tin), &Quicksilver, &Some(Tin)));
+        assert!(!Atom::is_match(&BaseMetal(Iron), &Quicksilver, &Some(Tin)));
+        assert!(!Atom::is_match(&BaseMetal(Copper), &Quicksilver, &Some(Tin)));
+        assert!(!Atom::is_match(&BaseMetal(Silver), &Quicksilver, &Some(Tin)));
+        assert!(!Atom::is_match(&BaseMetal(Gold), &Quicksilver, &Some(Tin)));
+        assert!(Atom::is_match(&BaseMetal(Lead), &Quicksilver, &Some(Iron)));
+        assert!(Atom::is_match(&BaseMetal(Tin), &Quicksilver, &Some(Iron)));
+        assert!(Atom::is_match(&BaseMetal(Iron), &Quicksilver, &Some(Iron)));
+        assert!(!Atom::is_match(&BaseMetal(Copper), &Quicksilver, &Some(Iron)));
+        assert!(!Atom::is_match(&BaseMetal(Silver), &Quicksilver, &Some(Iron)));
+        assert!(!Atom::is_match(&BaseMetal(Gold), &Quicksilver, &Some(Iron)));
+        assert!(Atom::is_match(&BaseMetal(Lead), &Quicksilver, &Some(Copper)));
+        assert!(Atom::is_match(&BaseMetal(Tin), &Quicksilver, &Some(Copper)));
+        assert!(Atom::is_match(&BaseMetal(Iron), &Quicksilver, &Some(Copper)));
+        assert!(Atom::is_match(&BaseMetal(Copper), &Quicksilver, &Some(Copper)));
+        assert!(!Atom::is_match(&BaseMetal(Silver), &Quicksilver, &Some(Copper)));
+        assert!(!Atom::is_match(&BaseMetal(Gold), &Quicksilver, &Some(Copper)));        
+        assert!(Atom::is_match(&BaseMetal(Lead), &Quicksilver, &Some(Silver)));
+        assert!(Atom::is_match(&BaseMetal(Tin), &Quicksilver, &Some(Silver)));
+        assert!(Atom::is_match(&BaseMetal(Iron), &Quicksilver, &Some(Silver)));
+        assert!(Atom::is_match(&BaseMetal(Copper), &Quicksilver, &Some(Silver)));
+        assert!(Atom::is_match(&BaseMetal(Silver), &Quicksilver, &Some(Silver)));
+        assert!(!Atom::is_match(&BaseMetal(Gold), &Quicksilver, &Some(Silver)));  
+        assert!(Atom::is_match(&BaseMetal(Lead), &Quicksilver, &Some(Gold)));
+        assert!(Atom::is_match(&BaseMetal(Tin), &Quicksilver, &Some(Gold)));
+        assert!(Atom::is_match(&BaseMetal(Iron), &Quicksilver, &Some(Gold)));
+        assert!(Atom::is_match(&BaseMetal(Copper), &Quicksilver, &Some(Gold)));
+        assert!(Atom::is_match(&BaseMetal(Silver), &Quicksilver, &Some(Gold)));
+        assert!(!Atom::is_match(&BaseMetal(Gold), &Quicksilver, &Some(Gold)));
+
+        // TODO: semantics here should be consistent, but it doesn't matter too much
+        // assert!(Atom::is_match(&Quicksilver, &BaseMetal(Lead), &None));
+        // assert!(Atom::is_match(&Quicksilver, &BaseMetal(Tin), &None));
+        // assert!(Atom::is_match(&Quicksilver, &BaseMetal(Iron), &None));
+        // assert!(Atom::is_match(&Quicksilver, &BaseMetal(Copper),&None));
+        // assert!(Atom::is_match(&Quicksilver, &BaseMetal(Silver),&None));
+        // assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Gold), &None));                 
     }
 
     #[test]
@@ -176,6 +255,7 @@ mod tests {
             assert!(!Atom::is_match(&BaseElement(Fire), &BaseMetal(Lead), m));
             assert!(!Atom::is_match(&BaseElement(Fire), &Quicksilver, m));
             assert!(!Atom::is_match(&BaseMetal(Gold), &Quicksilver, m));
+            assert!(!Atom::is_match(&Quicksilver, &BaseMetal(Gold), m));
             assert!(!Atom::is_match(&Quicksilver, &Quicksilver, m));
             assert!(!Atom::is_match(&Januae(Vitae), &Quicksilver, m));
             assert!(!Atom::is_match(&Januae(Vitae), &Salt, m));
